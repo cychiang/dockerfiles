@@ -31,16 +31,16 @@ ENV PACKAGES="\
 
 RUN echo \
   # replacing default repositories with edge ones
-    && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/testing" > /etc/apk/repositories \
-    && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community" >> /etc/apk/repositories \
-    && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/main" >> /etc/apk/repositories \
+    # && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/testing" > /etc/apk/repositories \
+    # && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community" >> /etc/apk/repositories \
+    # && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/main" >> /etc/apk/repositories \
 
   # Add the packages, with a CDN-breakage fallback if needed
     && apk add --no-cache $PACKAGES || \
     (sed -i -e 's/dl-cdn/dl-4/g' /etc/apk/repositories && apk add --no-cache $PACKAGES) \
 
   # turn back the clock -- so hacky!
-    && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/main/" > /etc/apk/repositories \
+    # && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/main/" > /etc/apk/repositories \
 
   # && echo "@community http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community" >> /etc/apk/repositories \
   # && echo "@testing http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/testing" >> /etc/apk/repositories \
@@ -59,13 +59,14 @@ RUN echo \
 
 USER node
 RUN mkdir /home/node/.npm-global
-
+# Add /home/node/.npm-global/bin to path
 RUN npm install -g gulp && \
     npm install -g gulp-concat && \
     npm install -g gulp-minify-css && \
     npm install -g gulp-rename && \
     npm install -g gulp-sass && \
     npm install -g gulp-uglify && \
-    npm install -g webpack
+    npm install -g webpack && \
+    PATH=/home/node/.npm-global/bin:$PATH
 
 CMD ["/bin/sh"]
