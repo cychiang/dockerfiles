@@ -61,6 +61,6 @@ USER node
 RUN mkdir /home/node/.npm-global
 # Add /home/node/.npm-global/bin to path
 RUN npm install -g gulp gulp-concat gulp-minify-css gulp-rename \
-    gulp-sass gulp-uglify webpack webpack-bundle-analyzer
+    gulp-sass gulp-uglify webpack webpack-cli webpack-bundle-analyzer
 
 CMD ["/bin/sh"]
