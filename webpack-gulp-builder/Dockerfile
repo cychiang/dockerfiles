@@ -56,6 +56,7 @@ RUN echo \
     && pip install --upgrade pip \
     && if [[ ! -e /usr/bin/pip ]]; then ln -sf /usr/bin/pip2.7 /usr/bin/pip; fi \
     && echo
+    && pip install --upgrade awscli==1.15.16
 
 USER node
 RUN mkdir /home/node/.npm-global
