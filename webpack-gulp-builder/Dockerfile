@@ -2,7 +2,6 @@ FROM node:8.10.0-alpine
 
 ENV ALPINE_VERSION=3.6
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
-
 # Install needed packages. Notes:
 #   * dumb-init: a proper init system for containers, to reap zombie children
 #   * musl: standard C library
