@@ -27,30 +27,11 @@ ENV PACKAGES="\
     python2-dev \
     py-setuptools \
 "
-
-RUN echo \
-  # replacing default repositories with edge ones
-    # && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/testing" > /etc/apk/repositories \
-    # && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community" >> /etc/apk/repositories \
-    # && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/main" >> /etc/apk/repositories \
-
-  # Add the packages, with a CDN-breakage fallback if needed
-    && apk add --no-cache $PACKAGES || \
+RUN apk add --no-cache $PACKAGES || \
     (sed -i -e 's/dl-cdn/dl-4/g' /etc/apk/repositories && apk add --no-cache $PACKAGES) \
-
-  # turn back the clock -- so hacky!
-    # && echo "http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/main/" > /etc/apk/repositories \
-
-  # && echo "@community http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/community" >> /etc/apk/repositories \
-  # && echo "@testing http://dl-cdn.alpinelinux.org/alpine/v$ALPINE_VERSION/testing" >> /etc/apk/repositories \
-  # && echo "@edge-main http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
-  # make some useful symlinks that are expected to exist
-
     && if [[ ! -e /usr/bin/python ]];        then ln -sf /usr/bin/python2.7 /usr/bin/python; fi \
     && if [[ ! -e /usr/bin/python-config ]]; then ln -sf /usr/bin/python2.7-config /usr/bin/python-config; fi \
     && if [[ ! -e /usr/bin/easy_install ]];  then ln -sf /usr/bin/easy_install-2.7 /usr/bin/easy_install; fi \
-  # Install and upgrade Pip
-
     && easy_install pip \
     && pip install --upgrade pip \
     && if [[ ! -e /usr/bin/pip ]]; then ln -sf /usr/bin/pip2.7 /usr/bin/pip; fi \
@@ -58,10 +39,8 @@ RUN echo \
     && pip install --upgrade awscli==1.15.16
 
 USER node
-RUN mkdir /home/node/.npm-global
-# Add /home/node/.npm-global/bin to path
-RUN npm install -g gulp gulp-concat gulp-minify-css gulp-rename \
-    gulp-sass gulp-uglify 
-# webpack@3.8.1 webpack-bundle-analyzer@2.9.1
+RUN mkdir -p /home/node/.npm-global
+RUN npm config get prefix
+RUN npm install -g gulp gulp-concat gulp-minify-css gulp-rename gulp-sass gulp-uglify webpack@3.8.1 webpack-bundle-analyzer@2.9.1
 
 CMD ["/bin/sh"]
