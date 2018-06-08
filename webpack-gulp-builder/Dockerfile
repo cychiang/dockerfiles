@@ -41,6 +41,7 @@ RUN apk add --no-cache $PACKAGES || \
 USER node
 RUN mkdir -p /home/node/.npm-global
 RUN npm config get prefix
-RUN npm install -g gulp gulp-concat gulp-minify-css gulp-rename gulp-sass gulp-uglify webpack@3.8.1 webpack-bundle-analyzer@2.9.1
+RUN npm install -g gulp gulp-concat gulp-minify-css gulp-rename gulp-sass gulp-uglify
+# webpack@3.8.1 webpack-bundle-analyzer@2.9.1
 
 CMD ["/bin/sh"]
